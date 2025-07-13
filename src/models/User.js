@@ -14,18 +14,24 @@ const User = sequelize.define(
       unique: true,
       allowNull: false,
     },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      validate: { isEmail: true },
+    },
     password: DataTypes.STRING,
-    nama: DataTypes.STRING,
+    // 1. admin, 2. mahasiswa
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: 2,
+    },
+    name: DataTypes.STRING,
     nip: {
       type: DataTypes.INTEGER,
       unique: true,
     },
-    foto_profil: {
+    profilePicture: {
       type: DataTypes.STRING,
-    },
-    role: {
-      type: DataTypes.ENUM("admin", "mahasiswa"),
-      defaultValue: "mahasiswa",
     },
     stase: {
       type: DataTypes.ENUM(
@@ -48,6 +54,12 @@ const User = sequelize.define(
     status: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+    },
+    verificatonCode: {
+      type: DataTypes.STRING,
+    },
+    forgotPasswordCode: {
+      type: DataTypes.STRING,
     },
     created_at: {
       type: DataTypes.DATE,
