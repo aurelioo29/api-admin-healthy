@@ -9,7 +9,7 @@ const setupDatabase = async () => {
     await sequelize.authenticate();
     console.log("✅ Database connection established successfully.");
 
-    await sequelize.sync(); // Optional: { alter: true } or { force: true }
+    await sequelize.sync({ alter: true }); // Optional: { alter: true } or { force: true }
     console.log("✅ Models synced");
   } catch (error) {
     console.error("❌ Error during DB setup:", error);
