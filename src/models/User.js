@@ -61,6 +61,9 @@ const User = sequelize.define(
     forgotPasswordCode: {
       type: DataTypes.STRING,
     },
+    forgotPasswordCodeExpires: {
+      type: DataTypes.INTEGER,
+    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
