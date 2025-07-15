@@ -11,24 +11,21 @@ const User = sequelize.define(
     },
     username: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
       validate: { isEmail: true },
     },
     password: DataTypes.STRING,
-    // 1. admin, 2. mahasiswa
     role: {
-      type: DataTypes.STRING,
-      defaultValue: 2,
+      type: DataTypes.ENUM("admin", "mahasiswa"),
+      defaultValue: "mahasiswa",
+      allowNull: false,
     },
     name: DataTypes.STRING,
     nip: {
       type: DataTypes.INTEGER,
-      unique: true,
     },
     profilePicture: {
       type: DataTypes.STRING,
@@ -80,6 +77,12 @@ const User = sequelize.define(
   {
     tableName: "users",
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ["username", "email", "nip"],
+      },
+    ],
   }
 );
 
