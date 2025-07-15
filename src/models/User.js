@@ -58,6 +58,10 @@ const User = sequelize.define(
     verificationCodeExpires: {
       type: DataTypes.INTEGER,
     },
+    verificationCodeRequestedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     forgotPasswordCode: {
       type: DataTypes.STRING,
     },
