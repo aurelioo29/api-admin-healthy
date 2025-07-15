@@ -48,12 +48,15 @@ const User = sequelize.define(
         "anestesi"
       ),
     },
-    status: {
+    isVerified: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
     },
-    verificatonCode: {
+    verificationCode: {
       type: DataTypes.STRING,
+    },
+    verificationCodeExpires: {
+      type: DataTypes.INTEGER,
     },
     forgotPasswordCode: {
       type: DataTypes.STRING,
@@ -78,10 +81,9 @@ const User = sequelize.define(
     tableName: "users",
     timestamps: false,
     indexes: [
-      {
-        unique: true,
-        fields: ["username", "email", "nip"],
-      },
+      { unique: true, fields: ["username"] },
+      { unique: true, fields: ["email"] },
+      { unique: true, fields: ["nip"] },
     ],
   }
 );
