@@ -37,7 +37,7 @@ const User = sequelize.define(
         "radiologi",
         "paru",
         "anak",
-        "sikiatri",
+        "psikiatri",
         "neurologi",
         "forensik",
         "bedah",
