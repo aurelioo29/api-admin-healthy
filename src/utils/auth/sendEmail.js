@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const sendEmail = async ({ emailTo, subject, code, text }) => {
+const sendEmail = async ({ emailTo, subject, html }) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", // Provider Gmail
     port: 587,
@@ -12,10 +12,10 @@ const sendEmail = async ({ emailTo, subject, code, text }) => {
   });
 
   const message = {
+    from: `Admin Absence <${process.env.USER_EMAIL}>`,
     to: emailTo,
     subject,
-    text,
-    html: `<p>Use this bellow code to ${text}</p><p>Your verification code is: <strong>${code}</strong></p>`,
+    html,
   };
 
   try {

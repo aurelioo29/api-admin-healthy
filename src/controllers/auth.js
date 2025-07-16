@@ -7,6 +7,12 @@ const {
   sendEmail,
 } = require("../utils/auth");
 const { Op } = require("sequelize");
+const {
+  testSendTemplate,
+  signUpTemplate,
+  resendCodeTemplate,
+  forgetPasswordTemplate,
+} = require("../utils/auth/templates");
 
 // Sign-Up Method
 const signup = async (request, response, next) => {
@@ -42,6 +48,7 @@ const signup = async (request, response, next) => {
 
     const hashedPassword = await hashPassword(password);
     const verificationCode = generateCode(6);
+    const html = signUpTemplate(verificationCode);
     const expiredCode = Math.floor(Date.now() / 1000) + 60 * 5; // Expires in 5 minutes
 
     const newUser = await User.create({
@@ -54,12 +61,10 @@ const signup = async (request, response, next) => {
       status: false,
     });
 
-    // await newUser.save();
     await sendEmail({
       emailTo: newUser.email,
       subject: "🔐 Account Verification Code",
-      code: verificationCode,
-      text: "Use this code to verify your account",
+      html,
     });
 
     response.status(201).json({
@@ -146,6 +151,7 @@ const resendVerificationCode = async (req, res, next) => {
     }
 
     const newCode = generateCode(6);
+    const html = resendCodeTemplate(newCode);
     const expires = Math.floor(Date.now() / 1000) + 5 * 60; // 5 minutes
 
     user.verificationCode = newCode;
@@ -157,8 +163,7 @@ const resendVerificationCode = async (req, res, next) => {
     await sendEmail({
       emailTo: user.email,
       subject: "🔄 New Verification Code",
-      code: newCode,
-      text: "Here is your new verification code",
+      html,
     });
 
     res.status(200).json({
@@ -301,6 +306,7 @@ const forgetPasswordCode = async (request, response, next) => {
     }
 
     const code = generateCode(6);
+    const html = forgetPasswordTemplate(code);
     const expires = Math.floor(now / 1000) + 5 * 60; // Expires in 5 minutes
 
     user.forgotPasswordCode = code;
@@ -312,8 +318,7 @@ const forgetPasswordCode = async (request, response, next) => {
     await sendEmail({
       emailTo: user.email,
       subject: "🔐 Forgot Password Code",
-      code: code,
-      text: "reset your password",
+      html,
     });
 
     response.status(200).json({
@@ -398,12 +403,12 @@ const testSendEmail = async (request, response, next) => {
     }
 
     const code = generateCode(6);
+    const html = testSendTemplate(code);
 
     await sendEmail({
       emailTo: email,
       subject: "🔐 Email Verification Code",
-      code,
-      text: "verify your account",
+      html,
     });
 
     response.status(200).json({
