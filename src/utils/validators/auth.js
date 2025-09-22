@@ -91,6 +91,16 @@ const recoverPasswordValidator = [
     .withMessage("Password must be at least 8 characters long")
     .notEmpty()
     .withMessage("Password is required"),
+
+  check("confirmPassword")
+    .notEmpty()
+    .withMessage("Confirm password is required")
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passwords do not match");
+      }
+      return true;
+    }),
 ];
 
 /**
@@ -112,5 +122,5 @@ module.exports = {
   validateSignin,
   emailValidator,
   recoverPasswordValidator,
-  verifyUserValidator
+  verifyUserValidator,
 };

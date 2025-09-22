@@ -32,7 +32,7 @@ app.use(
 
 // List of Routes
 app.use("/", router);
-app.use("/api/v1", authRoutes);
+app.use("/api", authRoutes);
 
 // Middleware not found handler
 app.use(notFound);

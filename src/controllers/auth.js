@@ -12,6 +12,7 @@ const {
   signUpTemplate,
   resendCodeTemplate,
   forgetPasswordTemplate,
+  notificationTemplate,
 } = require("../utils/auth/templates");
 
 // Sign-Up Method
@@ -101,8 +102,11 @@ const verifyUser = async (request, response, next) => {
 
     const now = Math.floor(Date.now() / 1000);
     if (user.verificationCode !== code || user.verificationCodeExpires < now) {
-      response.code = 400;
-      throw new Error("Invalid or expired verification code");
+      return response.status(400).json({
+        code: 400,
+        success: false,
+        message: "Invalid or expired verification code",
+      });
     }
 
     user.isVerified = true;
@@ -110,6 +114,14 @@ const verifyUser = async (request, response, next) => {
     user.verificationCodeExpires = null;
 
     await user.save();
+
+    const html = notificationTemplate();
+
+    await sendEmail({
+      emailTo: user.email,
+      subject: "✅ Account Verified Successfully",
+      html,
+    });
 
     response.status(200).json({
       code: 200,
@@ -146,8 +158,11 @@ const resendVerificationCode = async (req, res, next) => {
     // Check if the last request was less than 3 minutes ago
     // If so, throw an error to prevent spamming
     if (now - lastRequested < 3 * 60 * 1000) {
-      res.code = 429;
-      throw new Error("Please wait 3 minutes before requesting another code");
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "Please wait 3 minutes before requesting another code",
+      });
     }
 
     const newCode = generateCode(6);
@@ -301,13 +316,16 @@ const forgetPasswordCode = async (request, response, next) => {
     const cooldownPeriod = 5 * 60 * 1000; // 5 minutes
 
     if (now - lastRequest < cooldownPeriod) {
-      response.code = 429;
-      throw new Error("Please wait before requesting another code.");
+      response.status(400).json({
+        code: 400,
+        success: false,
+        message: "Please wait before requesting another code.",
+      });
     }
 
     const code = generateCode(6);
     const html = forgetPasswordTemplate(code);
-    const expires = Math.floor(now / 1000) + 5 * 60; // Expires in 5 minutes
+    const expires = Math.floor(now / 1000) + 5 * 60;
 
     user.forgotPasswordCode = code;
     user.forgotPasswordCodeExpires = expires;
@@ -355,17 +373,23 @@ const recoverPassword = async (request, response, next) => {
     const now = Math.floor(Date.now() / 1000);
 
     if (
-      user.forgetPasswordCode !== code ||
+      user.forgotPasswordCode !== code ||
       !user.forgotPasswordCodeExpires ||
       user.forgotPasswordCodeExpires < now
     ) {
-      response.code = 400;
-      throw new Error("Invalid or expired code");
+      return response.status(400).json({
+        code: 400,
+        success: false,
+        message: "Invalid or expired code",
+      });
     }
 
     if (password !== confirmPassword) {
-      response.code = 400;
-      throw new Error("Password and Confirm Password do not match");
+      return response.status(400).json({
+        code: 400,
+        success: false,
+        message: "Password and Confirm Password do not match",
+      });
     }
 
     const hashedPassword = await hashPassword(password);

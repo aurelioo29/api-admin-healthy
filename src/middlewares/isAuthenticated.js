@@ -26,9 +26,9 @@ const isAuthenticated = async (request, response, next) => {
       if (payload) {
         request.user = {
           id: payload.id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
+          username: payload.username,
+          email: payload.email,
+          role: payload.role,
         };
         next();
       } else {
