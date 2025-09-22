@@ -12,7 +12,7 @@ const sendEmail = async ({ emailTo, subject, html }) => {
   });
 
   const message = {
-    from: `Admin Absence <${process.env.USER_EMAIL}>`,
+    from: `Admin <${process.env.USER_EMAIL}>`,
     to: emailTo,
     subject,
     html,

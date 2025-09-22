@@ -19,34 +19,9 @@ const User = sequelize.define(
     },
     password: DataTypes.STRING,
     role: {
-      type: DataTypes.ENUM("admin", "mahasiswa"),
-      defaultValue: "mahasiswa",
+      type: DataTypes.ENUM("admin", "superadmin"),
+      defaultValue: "admin",
       allowNull: false,
-    },
-    name: DataTypes.STRING,
-    nip: {
-      type: DataTypes.INTEGER,
-    },
-    profilePicture: {
-      type: DataTypes.STRING,
-    },
-    stase: {
-      type: DataTypes.ENUM(
-        "penyakit_dalam",
-        "kulit_kelamin",
-        "radiologi",
-        "paru",
-        "anak",
-        "psikiatri",
-        "neurologi",
-        "forensik",
-        "bedah",
-        "ortopedi",
-        "tht",
-        "obgyn",
-        "mata",
-        "anestesi"
-      ),
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
@@ -87,8 +62,7 @@ const User = sequelize.define(
     indexes: [
       { unique: true, fields: ["username"] },
       { unique: true, fields: ["email"] },
-      { unique: true, fields: ["nip"] },
-    ],
+    ],a
   }
 );
 

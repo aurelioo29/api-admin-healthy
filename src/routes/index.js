@@ -8,7 +8,7 @@ router.get("/", (request, response) => {
   response.status(200).json({
     code: 200,
     success: true,
-    message: "Welcome to the Absence Management API",
+    message: "Welcome to the API Admin Healthy v1",
   });
 });
 

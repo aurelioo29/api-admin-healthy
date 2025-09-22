@@ -1,7 +1,7 @@
 {
-  "name": "absence-coas-be",
+  "name": "api-admin-healthy",
   "version": "1.0.0",
-  "description": "Backend for Absences Coas",
+  "description": "Backend for API Admin Healthy",
   "license": "ISC",
   "author": "aurelioo",
   "type": "commonjs",
