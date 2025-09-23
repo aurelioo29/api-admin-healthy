@@ -1,6 +1,8 @@
 const express = require("express");
 const authRoutes = require("./auth");
 const csrRoutes = require("./csr");
+const articleRoutes = require("./article");
+const categoryArticleRoutes = require("./categoryArticle");
 
 const router = express.Router();
 
@@ -17,4 +19,6 @@ module.exports = {
   authRoutes,
   router,
   csrRoutes,
+  articleRoutes,
+  categoryArticleRoutes,
 };

@@ -11,7 +11,13 @@ dotenv.config();
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const { authRoutes, router, csrRoutes } = require("./routes");
+const {
+  authRoutes,
+  router,
+  csrRoutes,
+  articleRoutes,
+  categoryArticleRoutes,
+} = require("./routes");
 const notFound = require("./controllers/notfound");
 
 const app = express();
@@ -33,7 +39,7 @@ app.use(
 
 // List of Routes
 app.use("/", router);
-app.use("/api", authRoutes, csrRoutes);
+app.use("/api", authRoutes, csrRoutes, categoryArticleRoutes);
 
 // Middleware not found handler
 app.use(notFound);
