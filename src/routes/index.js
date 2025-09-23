@@ -1,5 +1,6 @@
 const express = require("express");
 const authRoutes = require("./auth");
+const csrRoutes = require("./csr");
 
 const router = express.Router();
 
@@ -15,4 +16,5 @@ router.get("/", (request, response) => {
 module.exports = {
   authRoutes,
   router,
+  csrRoutes,
 };
