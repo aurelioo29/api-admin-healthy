@@ -11,11 +11,15 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const upload = require("../middlewares/multer");
 
 router.get("/upload/csr", isAuthenticated, csrController.getAllCsrPosts);
-router.get("/uploads/csr/:id", csrController.getCsrPostbyId);
-router.get("/upload/csr/:slug", csrController.getCsrPostbySlug);
+router.get("/uploads/csr/:id", isAuthenticated, csrController.getCsrPostbyId);
+router.get(
+  "/upload/csr/:slug",
+  isAuthenticated,
+  csrController.getCsrPostbySlug
+);
 router.post(
   "/upload/csr",
-  // rateLimiter,
+  rateLimiter,
   isAuthenticated,
   upload.single("image"),
   validateCsrPost,
