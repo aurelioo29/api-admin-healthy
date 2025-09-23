@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const findByIdOrSlug = require("../helpers/findByIdOrSlug");
 const User = require("../models/User");
 const generateUniqueSlug = require("../helpers/generateUniqueSlug");
+const logActivity = require("../helpers/logActivity");
 
 // Create CSR post Method
 const createCsrPost = async (req, res, next) => {
@@ -19,6 +20,16 @@ const createCsrPost = async (req, res, next) => {
       status,
       image,
       author_id: req.user.id,
+    });
+
+    await logActivity({
+      userId: req.user.id,
+      action: "CREATE",
+      resource: "/upload/csr",
+      resourceId: newPost.id,
+      description: `Created CSR post: "${newPost.title}" (ID: ${newPost.id})`,
+      ipAddress: req.ip,
+      userAgent: req.get("User-Agent"),
     });
 
     res.status(201).json({
@@ -185,6 +196,16 @@ const updateCsrPost = async (req, res, next) => {
 
     await csrPost.save();
 
+    await logActivity({
+      userId: req.user.id,
+      action: "UPDATE",
+      resource: "/upload/csr",
+      resourceId: csrPost.id,
+      description: `Updated CSR post: "${csrPost.title}" (ID: ${csrPost.id})`,
+      ipAddress: req.ip,
+      userAgent: req.get("User-Agent"),
+    });
+
     res.status(200).json({
       code: 200,
       success: true,
@@ -218,6 +239,16 @@ const deleteCsrPost = async (req, res, next) => {
     }
 
     await csrPost.destroy();
+
+    await logActivity({
+      userId: req.user.id,
+      action: "DELETE",
+      resource: "/upload/csr",
+      resourceId: csrPost.id,
+      description: `Deleted CSR post: "${csrPost.title}" (ID: ${csrPost.id})`,
+      ipAddress: req.ip,
+      userAgent: req.get("User-Agent"),
+    });
 
     res.status(200).json({
       code: 200,

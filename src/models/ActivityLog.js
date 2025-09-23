@@ -10,17 +10,40 @@ const ActivityLog = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    aktivitas: {
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    action: {
+      type: DataTypes.ENUM(
+        "CREATE",
+        "UPDATE",
+        "DELETE",
+        "LOGIN",
+        "UPLOAD",
+        "DOWNLOAD"
+      ),
+      allowNull: false,
+    },
+    resource: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    deskripsi: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    resource_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
-    endpoint: {
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    ipAddress: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
+    },
+    userAgent: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,

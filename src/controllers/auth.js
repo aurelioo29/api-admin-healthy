@@ -14,6 +14,7 @@ const {
   forgetPasswordTemplate,
   notificationTemplate,
 } = require("../utils/auth/templates");
+const logActivity = require("../helpers/logActivity");
 
 // Sign-Up Method
 const signup = async (request, response, next) => {
@@ -123,6 +124,16 @@ const verifyUser = async (request, response, next) => {
       html,
     });
 
+    await logActivity({
+      userId: user.id,
+      action: "VERIFY",
+      resource: "/auth/verification",
+      resourceId: user.id,
+      description: `User ${user.email} verified their account`,
+      ipAddress: request.ip,
+      userAgent: request.get("User-Agent"),
+    });
+
     response.status(200).json({
       code: 200,
       success: true,
@@ -226,6 +237,16 @@ const signin = async (request, response, next) => {
     }
 
     const token = generateToken(user);
+
+    await logActivity({
+      userId: user.id,
+      action: "LOGIN",
+      resource: "/auth/signin",
+      resourceId: user.id,
+      description: `User ${user.username} | ${user.email} logged in`,
+      ipAddress: request.ip,
+      userAgent: request.get("User-Agent"),
+    });
 
     response.status(200).json({
       code: 200,
@@ -339,6 +360,16 @@ const forgetPasswordCode = async (request, response, next) => {
       html,
     });
 
+    await logActivity({
+      userId: user.id,
+      action: "REQUEST_PASSWORD_RESET",
+      resource: "/auth/forgot-password-code",
+      resourceId: user.id,
+      description: `User ${user.email} requested password reset`,
+      ipAddress: request.ip,
+      userAgent: request.get("User-Agent"),
+    });
+
     response.status(200).json({
       code: 200,
       success: true,
@@ -400,6 +431,16 @@ const recoverPassword = async (request, response, next) => {
 
     await user.save();
 
+    await logActivity({
+      userId: user.id,
+      action: "CHANGE_PASSWORD",
+      resource: "/auth/recover-password",
+      resourceId: user.id,
+      description: `User ${user.email} changed password via recovery`,
+      ipAddress: request.ip,
+      userAgent: request.get("User-Agent"),
+    });
+
     response.status(200).json({
       code: 200,
       success: true,
@@ -450,6 +491,69 @@ const testSendEmail = async (request, response, next) => {
   }
 };
 
+// Create User by Superadmin Method
+const createUserBySuperAdmin = async (request, response, next) => {
+  try {
+    const { username, email, password, confirmPassword, role } = request.body;
+
+    if (req.user.role !== "superadmin") {
+      return response.status(403).json({
+        code: 403,
+        success: false,
+        message: "Forbidden: You do not have permission to perform this action",
+      });
+    }
+
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ username }, { email }],
+      },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "Username or Email already in use",
+      });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      role: role,
+    });
+
+    await logActivity({
+      userId: req.user.id,
+      action: "CREATE",
+      resource: "/auth/create-users",
+      resourceId: newUser.id,
+      description: `Created user ${username} with role ${role} by superadmin`,
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
+    res.status(201).json({
+      code: 201,
+      success: true,
+      message: "User created successfully by superadmin",
+      data: {
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+        status: newUser.status,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   testSendEmail,
   signup,
@@ -459,4 +563,5 @@ module.exports = {
   forgetPasswordCode,
   recoverPassword,
   resendVerificationCode,
+  createUserBySuperAdmin,
 };
