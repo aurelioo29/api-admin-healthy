@@ -19,6 +19,7 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json({ limit: "500mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "500mb" }));
+app.set("trust proxy", true);
 
 morgan.token("local-time", () => {
   return dayjs().tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm:ss");
