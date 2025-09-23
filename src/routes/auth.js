@@ -10,6 +10,7 @@ const {
   emailValidator,
   recoverPasswordValidator,
   verifyUserValidator,
+  validateCreateUserBySuperAdmin,
 } = require("../utils/validators/auth");
 
 /**
@@ -64,6 +65,14 @@ router.post(
   recoverPasswordValidator,
   validate,
   authController.recoverPassword
+);
+
+router.post(
+  "/auth/create-users",
+  isAuthenticated,
+  validateCreateUserBySuperAdmin,
+  validate,
+  authController.createUserBySuperAdmin
 );
 
 router.post("/test-email", authController.testSendEmail);
