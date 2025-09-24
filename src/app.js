@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -35,6 +36,12 @@ app.use(
   morgan(
     "[:local-time] :method :url :status :res[content-length] - :response-time ms"
   )
+);
+app.use(
+  cors({
+    origin: "http://localhost:3000", // ganti ke domain FE kamu
+    credentials: true,
+  })
 );
 
 // List of Routes
