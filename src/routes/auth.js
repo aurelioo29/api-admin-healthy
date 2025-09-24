@@ -79,4 +79,6 @@ router.post("/test-email", authController.testSendEmail);
 
 router.get("/users", isAuthenticated, authController.getUsers);
 
+router.get("/auth/me", isAuthenticated, authController.me);
+
 module.exports = router;

@@ -201,14 +201,17 @@ const resendVerificationCode = async (req, res, next) => {
   }
 };
 
-// Sign-In Method
+// Sign-In (Login) Method
 const signin = async (request, response, next) => {
   try {
     const { email, username, password } = request.body;
 
     if (!email && !username) {
-      response.code = 400;
-      throw new Error("Email or Username is required");
+      return response.status(400).json({
+        code: 400,
+        success: false,
+        message: "Email or Username is required",
+      });
     }
 
     const whereCondition = {};
@@ -225,15 +228,21 @@ const signin = async (request, response, next) => {
     });
 
     if (!user) {
-      response.code = 400;
-      throw new Error("Invalid Email or Username");
+      return response.status(404).json({
+        code: 404,
+        success: false,
+        message: "User not found",
+      });
     }
 
     const isPasswordValid = await comparePassword(password, user.password);
 
     if (!isPasswordValid) {
-      response.code = 400;
-      throw new Error("Invalid Password");
+      return response.status(400).json({
+        code: 400,
+        success: false,
+        message: "Password does not match",
+      });
     }
 
     const token = generateToken(user);
@@ -266,24 +275,27 @@ const signin = async (request, response, next) => {
 };
 
 // Get All Users Method
-const getUsers = async (request, response, next) => {
+const getUsers = async (req, res, next) => {
   try {
-    const { search, size, page } = request.query;
+    const { search, size, page } = req.query;
 
-    const limit = parseInt(size) || 10;
-    const currentPage = parseInt(page) || 1;
+    const limit = Math.min(parseInt(size) || 10, 100);
+    const currentPage = Math.max(parseInt(page) || 1, 1);
     const offset = (currentPage - 1) * limit;
 
-    let whereCondition = {};
+    const whereCondition = {};
 
     if (search) {
-      whereCondition = {
-        ...whereCondition,
-        [Op.or]: [
-          { username: { [Op.like]: `%${search}%` } },
-          { name: { [Op.like]: `%${search}%` } },
-        ],
-      };
+      const or = [
+        { username: { [Op.like]: `%${search}%` } },
+        { email: { [Op.like]: `%${search}%` } },
+      ];
+
+      // optional: kalau angka, boleh cari by id juga
+      const idNum = Number(search);
+      if (!Number.isNaN(idNum)) or.push({ id: idNum });
+
+      whereCondition[Op.or] = or;
     }
 
     const { count: totalUser, rows: users } = await User.findAndCountAll({
@@ -293,22 +305,15 @@ const getUsers = async (request, response, next) => {
       order: [["updated_at", "DESC"]],
     });
 
-    if (users.length === 0) {
-      return response.status(404).json({
-        code: 404,
-        success: false,
-        message: "No users found",
-      });
-    }
-
-    response.status(200).json({
+    // saran: balikin 200 meski kosong—biar FE nggak perlu treat sebagai error
+    return res.status(200).json({
       code: 200,
       success: true,
       message: "Users retrieved successfully",
       data: {
         users,
         totalUser,
-        totalPages: Math.ceil(totalUser / limit),
+        totalPages: Math.max(Math.ceil(totalUser / limit), 1),
         currentPage,
       },
     });
@@ -317,7 +322,7 @@ const getUsers = async (request, response, next) => {
   }
 };
 
-// Forget Password Code Method
+// Step 1 (Forget) - Forget Password Code Method
 const forgetPasswordCode = async (request, response, next) => {
   try {
     const { email } = request.body;
@@ -325,32 +330,35 @@ const forgetPasswordCode = async (request, response, next) => {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      response.code = 404;
-      throw new Error("Code sent if email is registered");
+      return response.status(404).json({
+        code: 404,
+        success: false,
+        message: "Code sent if email is registered", // tidak membocorkan kalau email ada/tidak
+      });
     }
 
-    const now = Date.now();
+    const now = Date.now(); // milidetik
     const lastRequest = user.forgotPasswordRequestedAt
       ? new Date(user.forgotPasswordRequestedAt).getTime()
       : 0;
 
-    const cooldownPeriod = 5 * 60 * 1000; // 5 minutes
+    const cooldownPeriod = 5 * 60 * 1000; // 5 menit (dalam ms)
 
     if (now - lastRequest < cooldownPeriod) {
-      response.status(400).json({
+      return response.status(400).json({
         code: 400,
         success: false,
-        message: "Please wait before requesting another code.",
+        message: "Please wait 5 minutes before requesting another code.",
       });
     }
 
-    const code = generateCode(6);
+    const code = generateCode(6); // 6 digit random OTP
     const html = forgetPasswordTemplate(code);
-    const expires = Math.floor(now / 1000) + 5 * 60;
+    const expires = Math.floor(now / 1000) + 5 * 60; // expire dalam 5 menit (dalam detik)
 
     user.forgotPasswordCode = code;
-    user.forgotPasswordCodeExpires = expires;
-    user.forgotPasswordRequestedAt = new Date();
+    user.forgotPasswordCodeExpires = expires; // pastikan field di DB pakai INT
+    user.forgotPasswordRequestedAt = new Date(); // terserah kamu mau pakai ms/detik tapi konsisten
 
     await user.save();
 
@@ -370,7 +378,7 @@ const forgetPasswordCode = async (request, response, next) => {
       userAgent: request.get("User-Agent"),
     });
 
-    response.status(200).json({
+    return response.status(200).json({
       code: 200,
       success: true,
       message: "Forgot password code sent successfully",
@@ -380,29 +388,32 @@ const forgetPasswordCode = async (request, response, next) => {
   }
 };
 
-// Change Password Method
+// Step 2 (Forget) - Change Password Method
 const recoverPassword = async (request, response, next) => {
   try {
     const { email, code, password, confirmPassword } = request.body;
 
-    const user = await User.findOne({
-      where: {
-        email,
-      },
-    });
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      response.code = 404;
-      throw new Error("Code sent if email is registered");
+      return response.status(404).json({
+        code: 404,
+        success: false,
+        message: "Code sent if email is registered",
+      });
     }
 
     if (!code || code.length !== 6) {
-      response.code = 400;
-      throw new Error("Invalid verification code format");
+      return response.status(400).json({
+        code: 400,
+        success: false,
+        message: "Invalid verification code format",
+      });
     }
 
-    const now = Math.floor(Date.now() / 1000);
+    const now = Math.floor(Date.now() / 1000); // pastikan pakai detik karena DB kamu INT
 
+    // ✅ Cek apakah code cocok & belum expire
     if (
       user.forgotPasswordCode !== code ||
       !user.forgotPasswordCodeExpires ||
@@ -415,6 +426,7 @@ const recoverPassword = async (request, response, next) => {
       });
     }
 
+    // ✅ Cek kecocokan password
     if (password !== confirmPassword) {
       return response.status(400).json({
         code: 400,
@@ -425,9 +437,11 @@ const recoverPassword = async (request, response, next) => {
 
     const hashedPassword = await hashPassword(password);
 
+    // ✅ Reset data kode
     user.password = hashedPassword;
-    user.forgetPasswordCode = null;
+    user.forgotPasswordCode = null;
     user.forgotPasswordCodeExpires = null;
+    user.forgotPasswordRequestedAt = null;
 
     await user.save();
 
@@ -441,7 +455,7 @@ const recoverPassword = async (request, response, next) => {
       userAgent: request.get("User-Agent"),
     });
 
-    response.status(200).json({
+    return response.status(200).json({
       code: 200,
       success: true,
       message: "Password reset successfully",
@@ -492,24 +506,39 @@ const testSendEmail = async (request, response, next) => {
 };
 
 // Create User by Superadmin Method
-const createUserBySuperAdmin = async (request, response, next) => {
+const createUserBySuperAdmin = async (req, res, next) => {
   try {
-    const { username, email, password, confirmPassword, role } = request.body;
+    const { username, email, password, confirmPassword, role } = req.body;
 
     if (req.user.role !== "superadmin") {
-      return response.status(403).json({
+      return res.status(403).json({
         code: 403,
         success: false,
         message: "Forbidden: You do not have permission to perform this action",
       });
     }
 
-    const existingUser = await User.findOne({
-      where: {
-        [Op.or]: [{ username }, { email }],
-      },
-    });
+    if (!username || !email || !password || !confirmPassword || !role) {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "All fields are required",
+      });
+    }
+    if (password !== confirmPassword) {
+      return res
+        .status(400)
+        .json({ code: 400, success: false, message: "Passwords do not match" });
+    }
+    if (!["admin", "superadmin"].includes(role)) {
+      return res
+        .status(400)
+        .json({ code: 400, success: false, message: "Invalid role" });
+    }
 
+    const existingUser = await User.findOne({
+      where: { [Op.or]: [{ username }, { email }] },
+    });
     if (existingUser) {
       return res.status(400).json({
         code: 400,
@@ -524,7 +553,8 @@ const createUserBySuperAdmin = async (request, response, next) => {
       username,
       email,
       password: hashedPassword,
-      role: role,
+      role,
+      isVerified: true,
     });
 
     await logActivity({
@@ -537,7 +567,7 @@ const createUserBySuperAdmin = async (request, response, next) => {
       userAgent: req.headers["user-agent"],
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       code: 201,
       success: true,
       message: "User created successfully by superadmin",
@@ -546,7 +576,9 @@ const createUserBySuperAdmin = async (request, response, next) => {
         username: newUser.username,
         email: newUser.email,
         role: newUser.role,
-        status: newUser.status,
+        isVerified: newUser.isVerified, // true
+        status: "active", // biar FE makin gampang
+        created_at: newUser.created_at,
       },
     });
   } catch (error) {
@@ -554,10 +586,34 @@ const createUserBySuperAdmin = async (request, response, next) => {
   }
 };
 
+const me = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        code: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    return res.status(200).json({
+      code: 200,
+      success: true,
+      message: "User authenticated",
+      user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   testSendEmail,
   signup,
   verifyUser,
+  me,
   signin,
   getUsers,
   forgetPasswordCode,
