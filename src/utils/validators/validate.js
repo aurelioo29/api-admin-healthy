@@ -1,19 +1,21 @@
 const { validationResult } = require("express-validator");
 
 const validate = (req, res, next) => {
-  const errors = validationResult(req);
+  const result = validationResult(req);
+  if (result.isEmpty()) return next();
 
   const mappedErrors = {};
+  result.array().forEach((err) => {
+    const key = err.path || err.param || "_global";
 
-  if (Object.keys(errors.errors).length === 0) {
-    next();
-  } else {
-    errors.errors.map((error) => {
-      mappedErrors[error.path] = error.msg;
-    });
+    if (!mappedErrors[key]) mappedErrors[key] = err.msg;
+  });
 
-    res.status(400).json(mappedErrors);
-  }
+  return res.status(400).json({
+    code: 400,
+    success: false,
+    errors: mappedErrors,
+  });
 };
 
 module.exports = validate;
