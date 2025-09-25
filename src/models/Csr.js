@@ -60,7 +60,7 @@ const Csr = sequelize.define(
   }
 );
 
-Csr.belongsTo(User, { foreignKey: "author_id" });
-User.hasMany(Csr, { foreignKey: "author_id" });
+Csr.belongsTo(User, { foreignKey: "author_id", as: "author" });
+User.hasMany(Csr, { foreignKey: "author_id", as: "posts" });
 
 module.exports = Csr;

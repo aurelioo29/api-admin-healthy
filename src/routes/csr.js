@@ -8,15 +8,11 @@ const {
   validateCsrUpdate,
 } = require("../utils/validators/csr");
 const isAuthenticated = require("../middlewares/isAuthenticated");
-const upload = require("../middlewares/multer");
+const { upload } = require("../utils/uploads");
 
 router.get("/upload/csr", isAuthenticated, csrController.getAllCsrPosts);
 router.get("/uploads/csr/:id", isAuthenticated, csrController.getCsrPostbyId);
-router.get(
-  "/upload/csr/:slug",
-  isAuthenticated,
-  csrController.getCsrPostbySlug
-);
+router.get("/upload/csr/:slug", csrController.getCsrPostbySlug);
 router.post(
   "/upload/csr",
   rateLimiter,
