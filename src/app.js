@@ -6,6 +6,8 @@ const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
 const cors = require("cors");
+const path = require("path");
+const UPLOAD_ROOT = path.resolve(process.cwd(), "uploads");
 
 dotenv.config();
 
@@ -18,6 +20,7 @@ const {
   csrRoutes,
   articleRoutes,
   categoryArticleRoutes,
+  activityLogRoutes,
 } = require("./routes");
 const notFound = require("./controllers/notfound");
 
@@ -32,11 +35,15 @@ morgan.token("local-time", () => {
   return dayjs().tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm:ss");
 });
 
+// Static folder for uploads
+app.use("/uploads", express.static(UPLOAD_ROOT));
+
 app.use(
   morgan(
     "[:local-time] :method :url :status :res[content-length] - :response-time ms"
   )
 );
+
 app.use(
   cors({
     origin: "http://localhost:3000", // ganti ke domain FE kamu
@@ -46,7 +53,14 @@ app.use(
 
 // List of Routes
 app.use("/", router);
-app.use("/api", authRoutes, csrRoutes, categoryArticleRoutes);
+app.use(
+  "/api",
+  authRoutes,
+  csrRoutes,
+  categoryArticleRoutes,
+  activityLogRoutes,
+  articleRoutes
+);
 
 // Middleware not found handler
 app.use(notFound);
