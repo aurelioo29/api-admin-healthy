@@ -62,6 +62,9 @@ const getAllCategoryArticles = async (req, res, next) => {
         offset,
         limit,
         order: [["created_at", "DESC"]],
+        include: [{ model: User, attributes: ["id", "username", "email"] }],
+        distinct: true,
+        subQuery: false,
       });
 
     if (category_articles.length === 0) {
