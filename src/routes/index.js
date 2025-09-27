@@ -3,6 +3,7 @@ const authRoutes = require("./auth");
 const csrRoutes = require("./csr");
 const articleRoutes = require("./article");
 const categoryArticleRoutes = require("./categoryArticle");
+const activityLogRoutes = require("./activityLog");
 
 const router = express.Router();
 
@@ -21,4 +22,5 @@ module.exports = {
   csrRoutes,
   articleRoutes,
   categoryArticleRoutes,
+  activityLogRoutes,
 };
