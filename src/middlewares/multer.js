@@ -2,34 +2,34 @@ const multer = require("multer");
 const path = require("path");
 const slugify = require("slugify");
 const fs = require("fs");
+const mime = require("mime-types");
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination(req, file, cb) {
     let folder = "uploads/others";
 
     if (/\/upload\/csr/i.test(req.originalUrl)) folder = "uploads/csr";
-    // else if (req.baseUrl.includes("/blog")) folder = "uploads/blog";
-    // else if (req.baseUrl.includes("/news")) folder = "uploads/news";
+    else if (/\/upload\/articles/i.test(req.originalUrl))
+      folder = "uploads/articles";
 
-    if (!fs.existsSync(folder)) {
-      fs.mkdirSync(folder, { recursive: true });
-    }
-
+    if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
     cb(null, folder);
   },
 
-  filename: function (req, file, cb) {
-    const originalName = path.parse(file.originalname).name;
-    const ext = path.extname(file.originalname);
+  filename(req, file, cb) {
+    const baseSource =
+      req.body?.slug || req.body?.title || path.parse(file.originalname).name;
 
-    const slug = slugify(originalName, { lower: true });
-    const timestamp = Date.now();
+    const baseSlug = slugify(baseSource, { lower: true, strict: true });
 
-    const filename = `${slug}-${timestamp}${ext}`;
-    cb(null, filename);
+    const ts = Date.now(); 
+
+    const ext = `.${(
+      mime.extension(file.mimetype) || path.extname(file.originalname).slice(1)
+    ).toLowerCase()}`;
+
+    cb(null, `${baseSlug}-${ts}${ext}`);
   },
 });
 
-const upload = multer({ storage });
-
-module.exports = upload;
+module.exports = multer({ storage });
