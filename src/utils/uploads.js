@@ -15,6 +15,8 @@ const storage = multer.diskStorage({
     let sub = "others";
     if (/\/upload\/csr/i.test(req.originalUrl)) sub = "csr";
     else if (/\/upload\/articles/i.test(req.originalUrl)) sub = "articles";
+    else if (/\/upload\/category-lab-tests/i.test(req.originalUrl))
+      sub = "category-lab-tests";
 
     const dir = path.join(UPLOAD_ROOT, sub);
     ensureDir(dir);
@@ -22,8 +24,20 @@ const storage = multer.diskStorage({
   },
 
   filename(req, file, cb) {
-    const baseSource =
-      req.body?.slug || req.body?.title || path.parse(file.originalname).name;
+    let baseSource = path.parse(file.originalname).name;
+
+    if (/\/upload\/category-lab-tests/i.test(req.originalUrl)) {
+      baseSource = req.body?.slug || req.body?.name || baseSource;
+    } else if (
+      /\/upload\/articles/i.test(req.originalUrl) ||
+      /\/upload\/csr/i.test(req.originalUrl)
+    ) {
+      baseSource = req.body?.slug || req.body?.title || baseSource;
+    } else {
+      baseSource =
+        req.body?.slug || req.body?.title || req.body?.name || baseSource;
+    }
+
     const baseSlug = slugify(baseSource, { lower: true, strict: true });
     const ts = Date.now();
     const ext = `.${(

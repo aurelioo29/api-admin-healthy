@@ -11,6 +11,8 @@ const storage = multer.diskStorage({
     if (/\/upload\/csr/i.test(req.originalUrl)) folder = "uploads/csr";
     else if (/\/upload\/articles/i.test(req.originalUrl))
       folder = "uploads/articles";
+    else if (/\/upload\/category-lab-tests/i.test(req.originalUrl))
+      folder = "uploads/category-lab-tests";
 
     if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
     cb(null, folder);
