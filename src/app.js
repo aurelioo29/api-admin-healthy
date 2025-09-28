@@ -21,6 +21,8 @@ const {
   articleRoutes,
   categoryArticleRoutes,
   activityLogRoutes,
+  labTestRoutes,
+  categoryLabTestRoutes,
 } = require("./routes");
 const notFound = require("./controllers/notfound");
 
@@ -59,7 +61,9 @@ app.use(
   csrRoutes,
   categoryArticleRoutes,
   activityLogRoutes,
-  articleRoutes
+  articleRoutes,
+  labTestRoutes,
+  categoryLabTestRoutes
 );
 
 // Middleware not found handler

@@ -3,6 +3,8 @@ const csrController = require("./csr");
 const articleController = require("./article");
 const categoryArticleController = require("./CategoryArticle");
 const activityLogController = require("./activityLog");
+const labTestController = require("./labTest");
+const categoryLabTestController = require("./categoryLabTest");
 
 module.exports = {
   authController,
@@ -10,4 +12,6 @@ module.exports = {
   articleController,
   categoryArticleController,
   activityLogController,
+  labTestController,
+  categoryLabTestController,
 };
