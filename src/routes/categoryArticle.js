@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const categoryArticleController = require("../controllers/categoryArticle");
+const { categoryArticleController } = require("../controllers");
 const rateLimiter = require("../middlewares/rateLimiter");
 const validate = require("../utils/validators/validate");
 const {
