@@ -6,6 +6,8 @@ const categoryArticleRoutes = require("./categoryArticle");
 const activityLogRoutes = require("./activityLog");
 const labTestRoutes = require("./labTest");
 const categoryLabTestRoutes = require("./categoryLabTest");
+const catalogRoutes = require("./catalog");
+const categoryCatalogRoutes = require("./categoryCatalog");
 
 const router = express.Router();
 
@@ -27,4 +29,6 @@ module.exports = {
   activityLogRoutes,
   labTestRoutes,
   categoryLabTestRoutes,
+  catalogRoutes,
+  categoryCatalogRoutes,
 };

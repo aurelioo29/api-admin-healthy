@@ -13,6 +13,8 @@ const storage = multer.diskStorage({
       folder = "uploads/articles";
     else if (/\/upload\/category-lab-tests/i.test(req.originalUrl))
       folder = "uploads/category-lab-tests";
+    else if (/\/upload\/catalogs/i.test(req.originalUrl))
+      folder = "uploads/catalogs";
 
     if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
     cb(null, folder);
@@ -24,7 +26,7 @@ const storage = multer.diskStorage({
 
     const baseSlug = slugify(baseSource, { lower: true, strict: true });
 
-    const ts = Date.now(); 
+    const ts = Date.now();
 
     const ext = `.${(
       mime.extension(file.mimetype) || path.extname(file.originalname).slice(1)

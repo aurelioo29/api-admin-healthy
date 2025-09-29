@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
     else if (/\/upload\/articles/i.test(req.originalUrl)) sub = "articles";
     else if (/\/upload\/category-lab-tests/i.test(req.originalUrl))
       sub = "category-lab-tests";
+    else if (/\/upload\/catalogs/i.test(req.originalUrl)) sub = "catalogs";
 
     const dir = path.join(UPLOAD_ROOT, sub);
     ensureDir(dir);
@@ -30,7 +31,8 @@ const storage = multer.diskStorage({
       baseSource = req.body?.slug || req.body?.name || baseSource;
     } else if (
       /\/upload\/articles/i.test(req.originalUrl) ||
-      /\/upload\/csr/i.test(req.originalUrl)
+      /\/upload\/csr/i.test(req.originalUrl) ||
+      /\/upload\/catalogs/i.test(req.originalUrl)
     ) {
       baseSource = req.body?.slug || req.body?.title || baseSource;
     } else {
