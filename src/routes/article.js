@@ -13,7 +13,6 @@ const { upload } = require("../utils/uploads");
 // list
 router.get(
   "/upload/articles",
-  isAuthenticated,
   articleController.getAllArticles
 );
 
