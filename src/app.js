@@ -50,7 +50,7 @@ app.use(
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // ganti ke domain FE kamu
+    origin: ["https://health.royal-klinik.cloud/", "http://localhost:3000"],
     credentials: true,
   })
 );
