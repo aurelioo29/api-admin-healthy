@@ -10,7 +10,7 @@ const {
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const { upload } = require("../utils/uploads");
 
-router.get("/upload/csr", isAuthenticated, csrController.getAllCsrPosts);
+router.get("/upload/csr", csrController.getAllCsrPosts);
 router.get("/uploads/csr/:id", isAuthenticated, csrController.getCsrPostbyId);
 router.get("/upload/csr/:slug", csrController.getCsrPostbySlug);
 router.post(
