@@ -7,6 +7,8 @@ const labTestController = require("./labTest");
 const categoryLabTestController = require("./categoryLabTest");
 const catalogController = require("./catalog");
 const categoryCatalogController = require("./categoryCatalog");
+const testimoniController = require("./testimoni");
+const lokasiKlinikController = require("./lokasiKlinik");
 
 module.exports = {
   authController,
@@ -18,4 +20,6 @@ module.exports = {
   categoryLabTestController,
   catalogController,
   categoryCatalogController,
+  testimoniController,
+  lokasiKlinikController,
 };

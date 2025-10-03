@@ -7,6 +7,8 @@ const Catalog = require("./Catalog");
 const CategoryCatalog = require("./CategoryCatalog");
 const LabTest = require("./LabTest");
 const CategoryLabTest = require("./CategoryLabTest");
+const Testimoni = require("./Testimoni");
+const LokasiKlinik = require("./lokasiKlinik");
 
 // Define associations
 User.hasMany(Csr, { foreignKey: "author_id" });
@@ -22,4 +24,6 @@ module.exports = {
   CategoryCatalog,
   LabTest,
   CategoryLabTest,
+  Testimoni,
+  LokasiKlinik,
 };

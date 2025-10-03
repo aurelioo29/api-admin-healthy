@@ -8,6 +8,8 @@ const labTestRoutes = require("./labTest");
 const categoryLabTestRoutes = require("./categoryLabTest");
 const catalogRoutes = require("./catalog");
 const categoryCatalogRoutes = require("./categoryCatalog");
+const testimoniRoutes = require("./testimoni");
+const lokasiKlinikRoutes = require("./lokasiKlinik");
 
 const router = express.Router();
 
@@ -31,4 +33,6 @@ module.exports = {
   categoryLabTestRoutes,
   catalogRoutes,
   categoryCatalogRoutes,
+  testimoniRoutes,
+  lokasiKlinikRoutes,
 };
