@@ -10,7 +10,7 @@ const {
 
 const createTestimoni = async (req, res, next) => {
   try {
-    const { name, age, job, content } = req.body;
+    const { name, age, job, content, link_video } = req.body;
     const image = relPathFromFile(req.file);
 
     const newTestimoni = await Testimoni.create({
@@ -19,6 +19,7 @@ const createTestimoni = async (req, res, next) => {
       job,
       content,
       image,
+      link_video,
       author_id: req.user.id,
     });
 
@@ -138,7 +139,7 @@ const getTestimoniByIdentifier = async (req, res, next) => {
 const updateTestimoni = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, age, job, content } = req.body;
+    const { name, age, job, content, link_video } = req.body;
 
     const testimoni = await Testimoni.findByPk(id);
     if (!testimoni) {
@@ -161,6 +162,7 @@ const updateTestimoni = async (req, res, next) => {
     if (age !== undefined) testimoni.age = age;
     if (job !== undefined) testimoni.job = job;
     if (content !== undefined) testimoni.content = content;
+    if (link_video !== undefined) testimoni.link_video = link_video;
 
     if (req.file) {
       const newRel = relPathFromFile(req.file);
