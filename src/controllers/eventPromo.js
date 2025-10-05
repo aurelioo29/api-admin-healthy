@@ -240,8 +240,8 @@ const deleteEventPromo = async (req, res, next) => {
 
 module.exports = {
   getAllEventPromos,
-  getEventPromosByIdentifier,
   createEventPromo,
+  getEventPromosByIdentifier,
   updateEventPromo,
-  deleteEventPromo,|
+  deleteEventPromo,
 };
