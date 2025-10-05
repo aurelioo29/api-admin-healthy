@@ -10,6 +10,9 @@ const catalogRoutes = require("./catalog");
 const categoryCatalogRoutes = require("./categoryCatalog");
 const testimoniRoutes = require("./testimoni");
 const lokasiKlinikRoutes = require("./lokasiKlinik");
+const eventPromoRoutes = require("./eventPromo");
+const aboutUsRoutes = require("./aboutUs");
+const layananKlinikRoutes = require("./layananKlinik");
 
 const router = express.Router();
 
@@ -35,4 +38,7 @@ module.exports = {
   categoryCatalogRoutes,
   testimoniRoutes,
   lokasiKlinikRoutes,
+  eventPromoRoutes,
+  aboutUsRoutes,
+  layananKlinikRoutes,
 };

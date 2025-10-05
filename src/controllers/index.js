@@ -9,6 +9,9 @@ const catalogController = require("./catalog");
 const categoryCatalogController = require("./categoryCatalog");
 const testimoniController = require("./testimoni");
 const lokasiKlinikController = require("./lokasiKlinik");
+const eventPromoController = require("./eventPromo");
+const layananKlinikController = require("./layananKlinik");
+const aboutUsController = require("./aboutUs");
 
 module.exports = {
   authController,
@@ -22,4 +25,7 @@ module.exports = {
   categoryCatalogController,
   testimoniController,
   lokasiKlinikController,
+  eventPromoController,
+  layananKlinikController,
+  aboutUsController,
 };
