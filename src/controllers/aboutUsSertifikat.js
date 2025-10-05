@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const AboutUsSertifikat = require("../models/AboutUsSertifikat");
+const AboutUsSertifikat = require("../models/aboutUs_sertifikat");
 const User = require("../models/User");
 const logActivity = require("../helpers/logActivity");
 const {

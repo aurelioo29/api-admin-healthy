@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const AboutUsGallery = require("../models/AboutUsGallery");
+const AboutUsGallery = require("../models/aboutUs_gallery");
 const User = require("../models/User");
 const logActivity = require("../helpers/logActivity");
 const {
