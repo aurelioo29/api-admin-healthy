@@ -14,6 +14,8 @@ const LayananKlinik = require("./layananKlinik");
 const LayananKlinikI18n = require("./layananKlinik_i18n");
 const AboutUs = require("./aboutUs");
 const AboutUsI18n = require("./aboutUs_i18n");
+const AboutUsGallery = require("./aboutUs_gallery");
+const AboutUsSertifikat = require("./aboutUs_sertifikat");
 
 // Define associations
 User.hasMany(Csr, { foreignKey: "author_id" });
@@ -36,4 +38,6 @@ module.exports = {
   LayananKlinikI18n,
   AboutUs,
   AboutUsI18n,
+  AboutUsGallery,
+  AboutUsSertifikat,
 };

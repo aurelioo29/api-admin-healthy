@@ -30,6 +30,8 @@ const {
   eventPromoRoutes,
   aboutUsRoutes,
   layananKlinikRoutes,
+  aboutUsGalleryRoutes,
+  aboutUsSertifikatRoutes,
 } = require("./routes");
 const notFound = require("./controllers/notfound");
 
@@ -77,7 +79,9 @@ app.use(
   lokasiKlinikRoutes,
   eventPromoRoutes,
   aboutUsRoutes,
-  layananKlinikRoutes
+  layananKlinikRoutes,
+  aboutUsGalleryRoutes,
+  aboutUsSertifikatRoutes
 );
 
 // Middleware not found handler

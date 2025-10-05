@@ -12,6 +12,8 @@ const lokasiKlinikController = require("./lokasiKlinik");
 const eventPromoController = require("./eventPromo");
 const layananKlinikController = require("./layananKlinik");
 const aboutUsController = require("./aboutUs");
+const aboutUsGalleryController = require("./aboutUsGallery");
+const aboutUsSertifikatController = require("./aboutUsSertifikat");
 
 module.exports = {
   authController,
@@ -28,4 +30,6 @@ module.exports = {
   eventPromoController,
   layananKlinikController,
   aboutUsController,
+  aboutUsSertifikatController,
+  aboutUsGalleryController,
 };

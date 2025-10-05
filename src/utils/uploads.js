@@ -18,6 +18,18 @@ const storage = multer.diskStorage({
     else if (/\/upload\/category-lab-tests/i.test(req.originalUrl))
       sub = "category-lab-tests";
     else if (/\/upload\/catalogs/i.test(req.originalUrl)) sub = "catalogs";
+    else if (/\/upload\/testimonis/i.test(req.originalUrl)) sub = "testimonis";
+    else if (/\/upload\/lokasi-klinik/i.test(req.originalUrl))
+      sub = "lokasi-klinik";
+    else if (/\/upload\/event-promos/i.test(req.originalUrl))
+      sub = "event-promos";
+    else if (/\/upload\/about-us/i.test(req.originalUrl)) sub = "about-us";
+    else if (/\/upload\/layanan-klinik/i.test(req.originalUrl))
+      sub = "layanan-klinik";
+    else if (/\/upload\/about-us-gallery/i.test(req.originalUrl))
+      sub = "about-us-gallery";
+    else if (/\/upload\/about-us-sertifikat/i.test(req.originalUrl))
+      sub = "about-us-sertifikat";
 
     const dir = path.join(UPLOAD_ROOT, sub);
     ensureDir(dir);
@@ -32,7 +44,14 @@ const storage = multer.diskStorage({
     } else if (
       /\/upload\/articles/i.test(req.originalUrl) ||
       /\/upload\/csr/i.test(req.originalUrl) ||
-      /\/upload\/catalogs/i.test(req.originalUrl)
+      /\/upload\/catalogs/i.test(req.originalUrl) ||
+      /\/upload\/testimonis/i.test(req.originalUrl) ||
+      /\/upload\/lokasi-klinik/i.test(req.originalUrl) ||
+      /\/upload\/event-promos/i.test(req.originalUrl) ||
+      /\/upload\/about-us/i.test(req.originalUrl) ||
+      /\/upload\/layanan-klinik/i.test(req.originalUrl) ||
+      /\/upload\/about-us-gallery/i.test(req.originalUrl) ||
+      /\/upload\/about-us-sertifikat/i.test(req.originalUrl)
     ) {
       baseSource = req.body?.slug || req.body?.title || baseSource;
     } else {

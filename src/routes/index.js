@@ -13,6 +13,8 @@ const lokasiKlinikRoutes = require("./lokasiKlinik");
 const eventPromoRoutes = require("./eventPromo");
 const aboutUsRoutes = require("./aboutUs");
 const layananKlinikRoutes = require("./layananKlinik");
+const aboutUsGalleryRoutes = require("./aboutUsGallery");
+const aboutUsSertifikatRoutes = require("./aboutUsSertifikat");
 
 const router = express.Router();
 
@@ -41,4 +43,6 @@ module.exports = {
   eventPromoRoutes,
   aboutUsRoutes,
   layananKlinikRoutes,
+  aboutUsGalleryRoutes,
+  aboutUsSertifikatRoutes,
 };
