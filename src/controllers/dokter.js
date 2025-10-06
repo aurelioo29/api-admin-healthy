@@ -55,8 +55,8 @@ const getAllDokters = async (req, res, next) => {
     const where = {};
     if (search) {
       where[Op.or] = [
-        { name: { [Op.iLike]: `%${search}%` } },
-        { specialization: { [Op.iLike]: `%${search}%` } },
+        { name: { [Op.like]: `%${search}%` } },
+        { specialization: { [Op.like]: `%${search}%` } },
       ];
     }
 

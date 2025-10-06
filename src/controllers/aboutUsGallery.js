@@ -55,7 +55,7 @@ const getAllAboutUsGallery = async (req, res, next) => {
 
     const where = {};
     if (search) {
-      where[Op.or] = [{ title: { [Op.iLike]: `%${search}%` } }];
+      where[Op.or] = [{ title: { [Op.like]: `%${search}%` } }];
     }
 
     if (status && ["draft", "published"].includes(status)) {
