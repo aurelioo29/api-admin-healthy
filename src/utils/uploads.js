@@ -30,6 +30,12 @@ const storage = multer.diskStorage({
       sub = "about-us-gallery";
     else if (/\/upload\/about-us-sertifikat/i.test(req.originalUrl))
       sub = "about-us-sertifikat";
+    else if (/\/upload\/about-us-president/i.test(req.originalUrl))
+      sub = "about-us-president";
+    else if (/\/upload\/about-us-core/i.test(req.originalUrl))
+      sub = "about-us-core";
+    else if (/\/upload\/corporate-health/i.test(req.originalUrl))
+      sub = "corporate-health";
 
     const dir = path.join(UPLOAD_ROOT, sub);
     ensureDir(dir);
@@ -51,7 +57,10 @@ const storage = multer.diskStorage({
       /\/upload\/about-us/i.test(req.originalUrl) ||
       /\/upload\/layanan-klinik/i.test(req.originalUrl) ||
       /\/upload\/about-us-gallery/i.test(req.originalUrl) ||
-      /\/upload\/about-us-sertifikat/i.test(req.originalUrl)
+      /\/upload\/about-us-sertifikat/i.test(req.originalUrl) ||
+      /\/upload\/about-us-president/i.test(req.originalUrl) ||
+      /\/upload\/about-us-core/i.test(req.originalUrl) ||
+      /\/upload\/corporate-health/i.test(req.originalUrl)
     ) {
       baseSource = req.body?.slug || req.body?.title || baseSource;
     } else {

@@ -15,6 +15,9 @@ const aboutUsRoutes = require("./aboutUs");
 const layananKlinikRoutes = require("./layananKlinik");
 const aboutUsGalleryRoutes = require("./aboutUsGallery");
 const aboutUsSertifikatRoutes = require("./aboutUsSertifikat");
+const aboutUsPresidentRoutes = require("./aboutUsPresident");
+const aboutUsCoreRoutes = require("./aboutUsCore");
+const corporateHealthRoutes = require("./corporateHealth");
 
 const router = express.Router();
 
@@ -45,4 +48,7 @@ module.exports = {
   layananKlinikRoutes,
   aboutUsGalleryRoutes,
   aboutUsSertifikatRoutes,
+  aboutUsPresidentRoutes,
+  aboutUsCoreRoutes,
+  corporateHealthRoutes,
 };

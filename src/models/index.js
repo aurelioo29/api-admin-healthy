@@ -16,6 +16,12 @@ const AboutUs = require("./aboutUs");
 const AboutUsI18n = require("./aboutUs_i18n");
 const AboutUsGallery = require("./aboutUs_gallery");
 const AboutUsSertifikat = require("./aboutUs_sertifikat");
+const AboutUsCore = require("./aboutUs_core");
+const AboutUsCoreI18n = require("./aboutUs_core_i18n");
+const AboutUsPresident = require("./aboutUs_president");
+const AboutUsPresidentI18n = require("./aboutUs_president_i18n");
+const CorporateHealth = require("./corporate_health");
+const CorporateHealthI18n = require("./corporate_health_i18n");
 
 // Define associations
 User.hasMany(Csr, { foreignKey: "author_id" });
@@ -40,4 +46,10 @@ module.exports = {
   AboutUsI18n,
   AboutUsGallery,
   AboutUsSertifikat,
+  AboutUsCore,
+  AboutUsCoreI18n,
+  AboutUsPresident,
+  AboutUsPresidentI18n,
+  CorporateHealth,
+  CorporateHealthI18n,
 };

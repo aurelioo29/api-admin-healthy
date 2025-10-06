@@ -14,6 +14,9 @@ const layananKlinikController = require("./layananKlinik");
 const aboutUsController = require("./aboutUs");
 const aboutUsGalleryController = require("./aboutUsGallery");
 const aboutUsSertifikatController = require("./aboutUsSertifikat");
+const corporateHealthController = require("./CorporateHealth");
+const aboutUsPresidentController = require("./aboutUsPresident");
+const aboutUsCoreController = require("./aboutUsCore");
 
 module.exports = {
   authController,
@@ -32,4 +35,7 @@ module.exports = {
   aboutUsController,
   aboutUsSertifikatController,
   aboutUsGalleryController,
+  corporateHealthController,
+  aboutUsPresidentController,
+  aboutUsCoreController
 };
