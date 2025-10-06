@@ -11,7 +11,6 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 
 router.get(
   "/category-articles",
-  isAuthenticated,
   categoryArticleController.getAllCategoryArticles
 );
 router.get(
