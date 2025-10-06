@@ -20,7 +20,7 @@ router.get(
 router.post(
   "/upload/testimonis",
   rateLimiter,
-  isAuthenticated,
+  // isAuthenticated,
   upload.single("image"),
   validateTestimoniPost,
   validate,
