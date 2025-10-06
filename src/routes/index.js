@@ -18,6 +18,7 @@ const aboutUsSertifikatRoutes = require("./aboutUsSertifikat");
 const aboutUsPresidentRoutes = require("./aboutUsPresident");
 const aboutUsCoreRoutes = require("./aboutUsCore");
 const corporateHealthRoutes = require("./corporateHealth");
+const dokterRoutes = require("./dokter");
 
 const router = express.Router();
 
@@ -51,4 +52,5 @@ module.exports = {
   aboutUsPresidentRoutes,
   aboutUsCoreRoutes,
   corporateHealthRoutes,
+  dokterRoutes,
 };

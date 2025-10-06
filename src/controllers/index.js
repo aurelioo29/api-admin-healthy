@@ -17,11 +17,13 @@ const aboutUsSertifikatController = require("./aboutUsSertifikat");
 const corporateHealthController = require("./CorporateHealth");
 const aboutUsPresidentController = require("./aboutUsPresident");
 const aboutUsCoreController = require("./aboutUsCore");
+const dokterController = require("./dokter");
 
 module.exports = {
   authController,
   csrController,
   articleController,
+  dokterController,
   categoryArticleController,
   activityLogController,
   labTestController,
@@ -37,5 +39,5 @@ module.exports = {
   aboutUsGalleryController,
   corporateHealthController,
   aboutUsPresidentController,
-  aboutUsCoreController
+  aboutUsCoreController,
 };

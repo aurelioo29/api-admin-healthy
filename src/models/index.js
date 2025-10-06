@@ -22,6 +22,7 @@ const AboutUsPresident = require("./aboutUs_president");
 const AboutUsPresidentI18n = require("./aboutUs_president_i18n");
 const CorporateHealth = require("./corporate_health");
 const CorporateHealthI18n = require("./corporate_health_i18n");
+const Dokter = require("./Dokter");
 
 // Define associations
 User.hasMany(Csr, { foreignKey: "author_id" });
@@ -52,4 +53,5 @@ module.exports = {
   AboutUsPresidentI18n,
   CorporateHealth,
   CorporateHealthI18n,
+  Dokter,
 };
