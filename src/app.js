@@ -57,7 +57,7 @@ app.use(
 
 app.use(
   cors({
-    origin: ["https://health.royal-klinik.cloud/", "http://localhost:3000"],
+    origin: ["https://health.royal-klinik.cloud", "http://localhost:3000"],
     credentials: true,
   })
 );
