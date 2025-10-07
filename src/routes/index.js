@@ -19,6 +19,8 @@ const aboutUsPresidentRoutes = require("./aboutUsPresident");
 const aboutUsCoreRoutes = require("./aboutUsCore");
 const corporateHealthRoutes = require("./corporateHealth");
 const dokterRoutes = require("./dokter");
+const categoryInvestorRoutes = require("./categoryInvestor");
+const investorRoutes = require("./investor");
 
 const router = express.Router();
 
@@ -53,4 +55,6 @@ module.exports = {
   aboutUsCoreRoutes,
   corporateHealthRoutes,
   dokterRoutes,
+  categoryInvestorRoutes,
+  investorRoutes,
 };

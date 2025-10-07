@@ -18,6 +18,8 @@ const corporateHealthController = require("./CorporateHealth");
 const aboutUsPresidentController = require("./aboutUsPresident");
 const aboutUsCoreController = require("./aboutUsCore");
 const dokterController = require("./dokter");
+const categoryInvestorController = require("./categoryInvestor");
+const investorController = require("./Investor");
 
 module.exports = {
   authController,
@@ -40,4 +42,6 @@ module.exports = {
   corporateHealthController,
   aboutUsPresidentController,
   aboutUsCoreController,
+  investorController,
+  categoryInvestorController,
 };
