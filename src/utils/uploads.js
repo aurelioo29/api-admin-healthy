@@ -5,6 +5,8 @@ const slugify = require("slugify");
 const mime = require("mime-types");
 
 const UPLOAD_ROOT = path.resolve(process.cwd(), "uploads");
+const MAX_IMAGE_MB = Number(process.env.MAX_IMAGE_MB || 5);
+const MAX_PDF_MB = Number(process.env.MAX_PDF_MB || 20);
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -37,6 +39,7 @@ const storage = multer.diskStorage({
     else if (/\/upload\/corporate-health/i.test(req.originalUrl))
       sub = "corporate-health";
     else if (/\/upload\/dokters/i.test(req.originalUrl)) sub = "dokters";
+    else if (/\/upload\/investors/i.test(req.originalUrl)) sub = "investors";
 
     const dir = path.join(UPLOAD_ROOT, sub);
     ensureDir(dir);
@@ -49,20 +52,9 @@ const storage = multer.diskStorage({
     if (/\/upload\/category-lab-tests/i.test(req.originalUrl)) {
       baseSource = req.body?.slug || req.body?.name || baseSource;
     } else if (
-      /\/upload\/articles/i.test(req.originalUrl) ||
-      /\/upload\/csr/i.test(req.originalUrl) ||
-      /\/upload\/catalogs/i.test(req.originalUrl) ||
-      /\/upload\/testimonis/i.test(req.originalUrl) ||
-      /\/upload\/lokasi-klinik/i.test(req.originalUrl) ||
-      /\/upload\/event-promos/i.test(req.originalUrl) ||
-      /\/upload\/about-us/i.test(req.originalUrl) ||
-      /\/upload\/layanan-klinik/i.test(req.originalUrl) ||
-      /\/upload\/about-us-gallery/i.test(req.originalUrl) ||
-      /\/upload\/about-us-sertifikat/i.test(req.originalUrl) ||
-      /\/upload\/about-us-president/i.test(req.originalUrl) ||
-      /\/upload\/about-us-core/i.test(req.originalUrl) ||
-      /\/upload\/corporate-health/i.test(req.originalUrl) ||
-      /\/upload\/dokters/i.test(req.originalUrl)
+      /\/upload\/articles|\/upload\/csr|\/upload\/catalogs|\/upload\/testimonis|\/upload\/lokasi-klinik|\/upload\/event-promos|\/upload\/about-us(?:-gallery|-sertifikat|-president|-core)?|\/upload\/layanan-klinik|\/upload\/corporate-health|\/upload\/dokters|\/upload\/investors/i.test(
+        req.originalUrl
+      )
     ) {
       baseSource = req.body?.slug || req.body?.title || baseSource;
     } else {
@@ -72,23 +64,65 @@ const storage = multer.diskStorage({
 
     const baseSlug = slugify(baseSource, { lower: true, strict: true });
     const ts = Date.now();
-    const ext = `.${(
-      mime.extension(file.mimetype) || path.extname(file.originalname).slice(1)
-    ).toLowerCase()}`;
+    const ext =
+      "." +
+      (
+        mime.extension(file.mimetype) ||
+        path.extname(file.originalname).slice(1)
+      ).toLowerCase();
+
     cb(null, `${baseSlug}-${ts}${ext}`);
   },
 });
 
+/* ---------- File filters ---------- */
+const imageFilter = (req, file, cb) => {
+  const ok = /^image\/(png|jpe?g|webp|gif|svg\+xml)$/.test(file.mimetype);
+  if (!ok) return cb(new Error("Only image files are allowed"));
+  cb(null, true);
+};
+
+const pdfFilter = (req, file, cb) => {
+  const isPdf =
+    file.mimetype === "application/pdf" ||
+    /\.pdf$/i.test(file.originalname) ||
+    mime.extension(file.mimetype) === "pdf";
+  if (!isPdf) return cb(new Error("Only PDF files are allowed"));
+  cb(null, true);
+};
+
+// optional: image OR pdf (if you ever need a mixed endpoint)
+const imageOrPdfFilter = (req, file, cb) => {
+  if (file.mimetype === "application/pdf" || /\.pdf$/i.test(file.originalname))
+    return cb(null, true);
+  if (/^image\/(png|jpe?g|webp|gif|svg\+xml)$/.test(file.mimetype))
+    return cb(null, true);
+  return cb(new Error("Only image or PDF files are allowed"));
+};
+
+/* ---------- Uploaders ---------- */
+// existing image uploader (unchanged behavior)
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter(req, file, cb) {
-    const ok = /^image\/(png|jpe?g|webp|gif|svg\+xml)$/.test(file.mimetype);
-    if (!ok) return cb(new Error("Only image files are allowed"));
-    cb(null, true);
-  },
+  limits: { fileSize: MAX_IMAGE_MB * 1024 * 1024 },
+  fileFilter: imageFilter,
 });
 
+// NEW: PDF-only uploader (for investors)
+const uploadPdf = multer({
+  storage,
+  limits: { fileSize: MAX_PDF_MB * 1024 * 1024 },
+  fileFilter: pdfFilter,
+});
+
+// optional: mixed (image/PDF)
+const uploadAnyDoc = multer({
+  storage,
+  limits: { fileSize: Math.max(MAX_IMAGE_MB, MAX_PDF_MB) * 1024 * 1024 },
+  fileFilter: imageOrPdfFilter,
+});
+
+/* ---------- Path helpers ---------- */
 const relPathFromFile = (file) => {
   if (!file) return null;
   const folder = path.basename(file.destination);
@@ -116,7 +150,9 @@ const tryDeleteUpload = (relPath) => {
 };
 
 module.exports = {
-  upload,
+  upload, // images
+  uploadPdf, // PDF-only (use this for Investor)
+  uploadAnyDoc, // optional: image OR PDF
   UPLOAD_ROOT,
   relPathFromFile,
   toPublicUrl,
