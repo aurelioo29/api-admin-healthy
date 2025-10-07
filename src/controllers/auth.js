@@ -586,6 +586,91 @@ const createUserBySuperAdmin = async (req, res, next) => {
   }
 };
 
+// PUT /users/:id/role { role: "admin" | "superadmin" }
+const updateUserRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const role = String(req.body.role || "").toLowerCase();
+
+    if (!["admin", "superadmin"].includes(role)) {
+      return res
+        .status(400)
+        .json({ code: 400, success: false, message: "Invalid role" });
+    }
+
+    // contoh proteksi: hanya superadmin boleh ubah role
+    if (String(req.user?.role).toLowerCase() !== "superadmin") {
+      return res.status(403).json({
+        code: 403,
+        success: false,
+        message: "Only superadmin can change roles",
+      });
+    }
+
+    // tidak boleh menurunkan dirinya sendiri jadi admin (opsional)
+    if (Number(id) === Number(req.user.id) && role !== "superadmin") {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "You cannot downgrade your own role",
+      });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user)
+      return res
+        .status(404)
+        .json({ code: 404, success: false, message: "User not found" });
+
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({
+      code: 200,
+      success: true,
+      message: "Role updated",
+      data: { id: user.id, role: user.role },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /users/:id
+const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (Number(id) === Number(req.user.id)) {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "You cannot delete your own account",
+      });
+    }
+
+    // hanya superadmin yang boleh hapus (atau atur sesuai kebijakanmu)
+    if (String(req.user?.role).toLowerCase() !== "superadmin") {
+      return res.status(403).json({
+        code: 403,
+        success: false,
+        message: "Only superadmin can delete users",
+      });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user)
+      return res
+        .status(404)
+        .json({ code: 404, success: false, message: "User not found" });
+
+    await user.destroy();
+    res.status(200).json({ code: 200, success: true, message: "User deleted" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const me = async (req, res, next) => {
   try {
     const user = req.user;
@@ -620,4 +705,6 @@ module.exports = {
   recoverPassword,
   resendVerificationCode,
   createUserBySuperAdmin,
+  updateUserRole,
+  deleteUser,
 };

@@ -81,4 +81,8 @@ router.get("/users", isAuthenticated, authController.getUsers);
 
 router.get("/auth/me", isAuthenticated, authController.me);
 
+router.put("/users/:id/role", isAuthenticated, authController.updateUserRole);
+
+router.delete("/users/:id", isAuthenticated, authController.deleteUser);
+
 module.exports = router;
