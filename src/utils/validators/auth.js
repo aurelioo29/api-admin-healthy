@@ -137,6 +137,28 @@ const recoverPasswordValidator = [
     }),
 ];
 
+const resetPasswordValidator = [
+  check("newPassword")
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
+    .withMessage(
+      "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+    )
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .notEmpty()
+    .withMessage("Password is required"),
+
+  check("confirmPassword")
+    .notEmpty()
+    .withMessage("Confirm password is required")
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passwords do not match");
+      }
+      return true;
+    }),
+];
+
 /**
  *
  */
@@ -158,4 +180,5 @@ module.exports = {
   recoverPasswordValidator,
   verifyUserValidator,
   validateCreateUserBySuperAdmin,
+  resetPasswordValidator,
 };

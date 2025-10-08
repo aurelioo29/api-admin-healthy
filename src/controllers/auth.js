@@ -530,7 +530,7 @@ const createUserBySuperAdmin = async (req, res, next) => {
         .status(400)
         .json({ code: 400, success: false, message: "Passwords do not match" });
     }
-    if (!["admin", "superadmin"].includes(role)) {
+    if (!["admin", "superadmin", "developer"].includes(role)) {
       return res
         .status(400)
         .json({ code: 400, success: false, message: "Invalid role" });
@@ -636,6 +636,111 @@ const updateUserRole = async (req, res, next) => {
   }
 };
 
+// PUT /users/:id/password { newPassword, confirmPassword }
+const adminSetPassword = async (req, res, next) => {
+  try {
+    // Wajib login + superadmin
+    if (String(req.user?.role).toLowerCase() !== "superadmin") {
+      return res.status(403).json({
+        code: 403,
+        success: false,
+        message: "Forbidden: Only superadmin can set user passwords",
+      });
+    }
+
+    const { id } = req.params;
+    const { newPassword, confirmPassword } = req.body || {};
+
+    // Validasi input
+    if (!newPassword || !confirmPassword) {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "newPassword and confirmPassword are required",
+      });
+    }
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "Password and Confirm Password do not match",
+      });
+    }
+    if (newPassword.length < 8) {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "Password must be at least 8 characters",
+      });
+    }
+
+    // Ambil user target
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ code: 404, success: false, message: "User not found" });
+    }
+
+    // Kebijakan: superadmin TIDAK bisa override superadmin lain (kecuali dirinya sendiri)
+    const targetRole = String(user.role || "").toLowerCase();
+    const actorIsTarget = Number(req.user.id) === Number(user.id);
+    if (targetRole === "superadmin" && !actorIsTarget) {
+      return res.status(400).json({
+        code: 400,
+        success: false,
+        message: "Cannot override another superadmin's password",
+      });
+    }
+
+    // (Opsional) Tolak jika password baru sama dengan yang lama
+    // if (user.password) {
+    //   const same = await comparePassword(newPassword, user.password);
+    //   if (same) {
+    //     return res.status(400).json({
+    //       code: 400,
+    //       success: false,
+    //       message: "New password must be different from the old one",
+    //     });
+    //   }
+    // }
+
+    // Hash & setel
+    const hashed = await hashPassword(newPassword);
+    user.password = hashed;
+
+    // Bersihkan artefak reset
+    user.forgotPasswordCode = null;
+    user.forgotPasswordCodeExpires = null;
+    user.forgotPasswordRequestedAt = null;
+
+    // Sentuhan administrasi
+    user.updated_at = new Date();
+
+    await user.save();
+
+    // Audit log
+    await logActivity({
+      userId: req.user.id, // pelaku
+      action: "ADMIN_SET_PASSWORD",
+      resource: "/auth/admin/users/:id/password",
+      resourceId: user.id, // target
+      description: `Superadmin set password for ${user.email} (role: ${user.role})`,
+      ipAddress: req.ip,
+      userAgent: req.get("User-Agent"),
+    });
+
+    return res.status(200).json({
+      code: 200,
+      success: true,
+      message: "Password updated by superadmin",
+      data: { id: user.id, email: user.email, role: user.role },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // DELETE /users/:id
 const deleteUser = async (req, res, next) => {
   try {
@@ -707,4 +812,5 @@ module.exports = {
   createUserBySuperAdmin,
   updateUserRole,
   deleteUser,
+  adminSetPassword,
 };

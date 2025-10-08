@@ -11,6 +11,7 @@ const {
   recoverPasswordValidator,
   verifyUserValidator,
   validateCreateUserBySuperAdmin,
+  resetPasswordValidator,
 } = require("../utils/validators/auth");
 
 /**
@@ -84,5 +85,13 @@ router.get("/auth/me", isAuthenticated, authController.me);
 router.put("/users/:id/role", isAuthenticated, authController.updateUserRole);
 
 router.delete("/users/:id", isAuthenticated, authController.deleteUser);
+
+router.put(
+  "/auth/update-password/:id/password",
+  isAuthenticated,
+  resetPasswordValidator,
+  validate,
+  authController.adminSetPassword
+);
 
 module.exports = router;
