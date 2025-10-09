@@ -137,8 +137,9 @@ const getHomeCardByIdentifier = async (req, res, next) => {
 
 const updateHomeCard = async (req, res, next) => {
   try {
-    const { title, status } = req.body;
     const { id } = req.params;
+
+    const { title, status } = req.body;
 
     const card = await HomeCard.findByPk(id);
     if (!card) {

@@ -18,7 +18,7 @@ router.get(
   homeCardController.getHomeCardByIdentifier
 );
 router.put(
-  "/upload/home-card/:identifier",
+  "/upload/home-card/:id",
   rateLimiter,
   isAuthenticated,
   upload.single("image"),
