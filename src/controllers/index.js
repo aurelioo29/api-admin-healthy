@@ -22,6 +22,7 @@ const categoryInvestorController = require("./categoryInvestor");
 const investorController = require("./Investor");
 const produkLayananController = require("./produkLayanan");
 const HeroSectionController = require("./heroSection");
+const homeCardController = require("./homeCard");
 
 module.exports = {
   authController,
@@ -48,4 +49,5 @@ module.exports = {
   categoryInvestorController,
   produkLayananController,
   HeroSectionController,
+  homeCardController,
 };

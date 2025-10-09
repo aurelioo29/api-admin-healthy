@@ -23,6 +23,7 @@ const categoryInvestorRoutes = require("./categoryInvestor");
 const investorRoutes = require("./investor");
 const produkLayananRoutes = require("./produkLayanan");
 const heroSectionRoutes = require("./heroSection");
+const homeCardRoutes = require("./homeCard");
 
 const router = express.Router();
 
@@ -61,4 +62,5 @@ module.exports = {
   investorRoutes,
   produkLayananRoutes,
   heroSectionRoutes,
+  homeCardRoutes,
 };

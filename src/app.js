@@ -40,6 +40,7 @@ const {
   investorRoutes,
   produkLayananRoutes,
   heroSectionRoutes,
+  homeCardRoutes,
 } = require("./routes");
 const notFound = require("./controllers/notfound");
 
@@ -97,7 +98,8 @@ app.use(
   categoryInvestorRoutes,
   investorRoutes,
   produkLayananRoutes,
-  heroSectionRoutes
+  heroSectionRoutes,
+  homeCardRoutes
 );
 
 // Middleware not found handler

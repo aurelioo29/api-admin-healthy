@@ -28,6 +28,7 @@ const Investor = require("./Investor");
 const ProdukLayanan = require("./produkLayanan");
 const HeroSection = require("./hero_section");
 const HeroSectionI18n = require("./hero_section_i18n");
+const HomeCard = require("./homeCard");
 
 // Define associations
 User.hasMany(Csr, { foreignKey: "author_id" });
@@ -64,4 +65,5 @@ module.exports = {
   ProdukLayanan,
   HeroSection,
   HeroSectionI18n,
+  HomeCard,
 };

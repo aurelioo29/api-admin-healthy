@@ -44,6 +44,7 @@ const storage = multer.diskStorage({
       sub = "hero-sections";
     else if (/\/upload\/produk-layanan/i.test(req.originalUrl))
       sub = "produk-layanan";
+    else if (/\/upload\/home-card/i.test(req.originalUrl)) sub = "home-card";
 
     const dir = path.join(UPLOAD_ROOT, sub);
     ensureDir(dir);
@@ -56,7 +57,7 @@ const storage = multer.diskStorage({
     if (/\/upload\/category-lab-tests/i.test(req.originalUrl)) {
       baseSource = req.body?.slug || req.body?.name || baseSource;
     } else if (
-      /\/upload\/articles|\/upload\/csr|\/upload\/catalogs|\/upload\/testimonis|\/upload\/lokasi-klinik|\/upload\/event-promos|\/upload\/about-us(?:-gallery|-sertifikat|-president|-core)?|\/upload\/layanan-klinik|\/upload\/corporate-health|\/upload\/dokters|\/upload\/investors|\/upload\/hero-sections|\/upload\/produk-layanan/i.test(
+      /\/upload\/articles|\/upload\/csr|\/upload\/catalogs|\/upload\/testimonis|\/upload\/lokasi-klinik|\/upload\/event-promos|\/upload\/about-us(?:-gallery|-sertifikat|-president|-core)?|\/upload\/layanan-klinik|\/upload\/corporate-health|\/upload\/dokters|\/upload\/investors|\/upload\/hero-sections|\/upload\/produk-layanan|\/upload\/home-card/i.test(
         req.originalUrl
       )
     ) {
