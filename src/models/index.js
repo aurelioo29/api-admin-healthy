@@ -25,6 +25,9 @@ const CorporateHealthI18n = require("./corporate_health_i18n");
 const Dokter = require("./Dokter");
 const CategoryInvestor = require("./categoryInvestor");
 const Investor = require("./Investor");
+const ProdukLayanan = require("./produkLayanan");
+const HeroSection = require("./hero_section");
+const HeroSectionI18n = require("./hero_section_i18n");
 
 // Define associations
 User.hasMany(Csr, { foreignKey: "author_id" });
@@ -58,4 +61,7 @@ module.exports = {
   Dokter,
   CategoryInvestor,
   Investor,
+  ProdukLayanan,
+  HeroSection,
+  HeroSectionI18n,
 };

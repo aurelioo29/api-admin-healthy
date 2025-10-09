@@ -21,6 +21,8 @@ const corporateHealthRoutes = require("./corporateHealth");
 const dokterRoutes = require("./dokter");
 const categoryInvestorRoutes = require("./categoryInvestor");
 const investorRoutes = require("./investor");
+const produkLayananRoutes = require("./produkLayanan");
+const heroSectionRoutes = require("./heroSection");
 
 const router = express.Router();
 
@@ -57,4 +59,6 @@ module.exports = {
   dokterRoutes,
   categoryInvestorRoutes,
   investorRoutes,
+  produkLayananRoutes,
+  heroSectionRoutes,
 };
