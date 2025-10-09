@@ -97,7 +97,7 @@ const getAllDokters = async (req, res, next) => {
 const getDokterByIdentifier = async (req, res, next) => {
   try {
     const { identifier } = req.params;
-    const isNumericId = /^\d+$/.test(identifier);
+    const isNumeric = /^\d+$/.test(identifier);
 
     const where = isNumeric
       ? { id: parseInt(identifier, 10) }
