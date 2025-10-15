@@ -592,23 +592,30 @@ const updateUserRole = async (req, res, next) => {
     const { id } = req.params;
     const role = String(req.body.role || "").toLowerCase();
 
-    if (!["admin", "superadmin"].includes(role)) {
+    if (!["admin", "superadmin", "developer"].includes(role)) {
       return res
         .status(400)
         .json({ code: 400, success: false, message: "Invalid role" });
     }
 
-    // contoh proteksi: hanya superadmin boleh ubah role
-    if (String(req.user?.role).toLowerCase() !== "superadmin") {
+    // contoh proteksi: hanya developer boleh ubah role
+    if (
+      String(req.user?.role).toLowerCase() !== "developer" &&
+      String(req.user?.role).toLowerCase() !== "superadmin"
+    ) {
       return res.status(403).json({
         code: 403,
         success: false,
-        message: "Only superadmin can change roles",
+        message: "Only developer or superadmin can change roles",
       });
     }
 
     // tidak boleh menurunkan dirinya sendiri jadi admin (opsional)
-    if (Number(id) === Number(req.user.id) && role !== "superadmin") {
+    if (
+      Number(id) === Number(req.user.id) &&
+      role !== "superadmin" &&
+      req.user.role === "superadmin"
+    ) {
       return res.status(400).json({
         code: 400,
         success: false,
@@ -640,11 +647,12 @@ const updateUserRole = async (req, res, next) => {
 const adminSetPassword = async (req, res, next) => {
   try {
     // Wajib login + superadmin
-    if (String(req.user?.role).toLowerCase() !== "superadmin") {
+    if (String(req.user?.role).toLowerCase() !== "superadmin" &&
+        String(req.user?.role).toLowerCase() !== "developer") {
       return res.status(403).json({
         code: 403,
         success: false,
-        message: "Forbidden: Only superadmin can set user passwords",
+        message: "Forbidden: Only superadmin or developer can set user passwords",
       });
     }
 
