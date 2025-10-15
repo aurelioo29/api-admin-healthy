@@ -47,21 +47,21 @@ const User = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
   },
   {
     tableName: "users",
-    timestamps: false,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+
+    // SOFT DELETE
+    paranoid: true,
+    deletedAt: "deleted_at",
+
+    underscored: true,
     indexes: [
-      { unique: true, fields: ["username"] },
-      { unique: true, fields: ["email"] },
+      { unique: true, fields: ["username", "deleted_at"] },
+      { unique: true, fields: ["email", "deleted_at"] },
     ],
   }
 );
