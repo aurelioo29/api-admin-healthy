@@ -176,13 +176,13 @@ const updateArticle = async (req, res, next) => {
         .json({ code: 404, success: false, message: "Article not found" });
     }
 
-    if (article.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this article",
-      });
-    }
+    // if (article.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this article",
+    //   });
+    // }
 
     if (title && title !== article.title) {
       article.slug = await generateUniqueSlug(Article, title);
@@ -239,13 +239,13 @@ const deleteArticle = async (req, res, next) => {
         .json({ code: 404, success: false, message: "Article not found" });
     }
 
-    if (article.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this article",
-      });
-    }
+    // if (article.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this article",
+    //   });
+    // }
 
     if (article.image) tryDeleteUpload(article.image);
     await article.destroy();

@@ -24,7 +24,7 @@ const HeroSection = sequelize.define(
       unique: true,
     },
     position: {
-      type: DataTypes.ENUM("left", "right"),
+      type: DataTypes.ENUM("left", "right", "full"),
       allowNull: false,
       defaultValue: "left",
     },

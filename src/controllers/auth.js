@@ -510,7 +510,7 @@ const createUserBySuperAdmin = async (req, res, next) => {
   try {
     const { username, email, password, confirmPassword, role } = req.body;
 
-    if (req.user.role !== "superadmin") {
+    if (req.user.role !== "developer") {
       return res.status(403).json({
         code: 403,
         success: false,
@@ -755,11 +755,11 @@ const deleteUser = async (req, res, next) => {
     }
 
     // hanya superadmin yang boleh hapus (atau atur sesuai kebijakanmu)
-    if (String(req.user?.role).toLowerCase() !== "superadmin") {
+    if (String(req.user?.role).toLowerCase() !== "developer") {
       return res.status(403).json({
         code: 403,
         success: false,
-        message: "Only superadmin can delete users",
+        message: "Only developer can delete users",
       });
     }
 
@@ -772,7 +772,14 @@ const deleteUser = async (req, res, next) => {
     await user.destroy();
     res.status(200).json({ code: 200, success: true, message: "User deleted" });
   } catch (err) {
-    next(err);
+    // next(err);
+    console.error("Delete user failed:", {
+      name: err?.name,
+      message: err?.message,
+      sql: err?.sql,
+      sqlMessage: err?.parent?.sqlMessage || err?.original?.sqlMessage,
+      code: err?.parent?.code || err?.original?.code,
+    });
   }
 };
 

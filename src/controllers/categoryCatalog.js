@@ -130,13 +130,13 @@ const updateCategoryCatalog = async (req, res, next) => {
         .status(404)
         .json({ code: 404, success: false, message: "Category not found" });
 
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not allowed to update this category",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not allowed to update this category",
+    //   });
+    // }
 
     if (name && name !== row.name) {
       row.slug = await generateUniqueSlug(CategoryCatalog, name);
@@ -176,13 +176,13 @@ const deleteCategoryCatalog = async (req, res, next) => {
         .status(404)
         .json({ code: 404, success: false, message: "Category not found" });
 
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not allowed to delete this category",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not allowed to delete this category",
+    //   });
+    // }
 
     // const usedCount = await Catalog.count({ where: { category_id: id } });
     // if (usedCount > 0) {

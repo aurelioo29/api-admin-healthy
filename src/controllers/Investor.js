@@ -236,13 +236,13 @@ const deleteInvestor = async (req, res, next) => {
       });
     }
 
-    if (investor.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this investor",
-      });
-    }
+    // if (investor.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this investor",
+    //   });
+    // }
 
     if (investor.file) tryDeleteUpload(investor.file);
     await investor.destroy();

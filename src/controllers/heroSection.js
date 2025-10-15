@@ -19,7 +19,12 @@ const normBool = (v) => {
   return s === "true" || s === "1" || s === "on" || s === "yes";
 };
 
-const normPos = (v) => (String(v).toLowerCase() === "right" ? "right" : "left");
+const normPos = (v) => {
+  const s = String(v || "").toLowerCase();
+  if (s === "right") return "right";
+  if (s === "full") return "full";
+  return "left";
+};
 
 const prettifyFilename = (name = "") => {
   const base = String(name).replace(/\.[^/.]+$/, "");

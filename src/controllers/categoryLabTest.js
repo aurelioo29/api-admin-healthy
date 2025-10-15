@@ -156,13 +156,13 @@ const updateCategoryLabTest = async (req, res, next) => {
     }
 
     // Optional: batasi author yang bisa edit
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not allowed to update this category",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not allowed to update this category",
+    //   });
+    // }
 
     if (name && name !== row.name) {
       row.slug = await generateUniqueSlug(CategoryLabTest, name);
@@ -216,13 +216,13 @@ const deleteCategoryLabTest = async (req, res, next) => {
         .json({ code: 404, success: false, message: "Category not found" });
     }
 
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not allowed to delete this category",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not allowed to delete this category",
+    //   });
+    // }
 
     if (row.image) tryDeleteUpload(row.image);
     await row.destroy();

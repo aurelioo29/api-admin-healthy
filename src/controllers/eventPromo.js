@@ -148,13 +148,13 @@ const updateEventPromo = async (req, res, next) => {
       });
     }
 
-    if (eventPromo.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this Event/Promo",
-      });
-    }
+    // if (eventPromo.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this Event/Promo",
+    //   });
+    // }
 
     if (title) eventPromo.title = title;
     if (date) eventPromo.date = date;
@@ -207,13 +207,13 @@ const deleteEventPromo = async (req, res, next) => {
       });
     }
 
-    if (eventPromo.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this Event/Promo",
-      });
-    }
+    // if (eventPromo.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this Event/Promo",
+    //   });
+    // }
 
     if (eventPromo.image) tryDeleteUpload(eventPromo.image);
     await eventPromo.destroy();

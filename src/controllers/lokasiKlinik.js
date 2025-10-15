@@ -179,13 +179,13 @@ const updateLokasiKlinik = async (req, res, next) => {
       });
     }
 
-    if (lokasiKlinik.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this Lokasi Klinik",
-      });
-    }
+    // if (lokasiKlinik.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this Lokasi Klinik",
+    //   });
+    // }
 
     if (title && title !== lokasiKlinik.title) {
       lokasiKlinik.slug = await generateUniqueSlug(LokasiKlinik, title);
@@ -245,13 +245,13 @@ const deleteLokasiKlinik = async (req, res, next) => {
       });
     }
 
-    if (lokasiKlinik.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this Lokasi Klinik",
-      });
-    }
+    // if (lokasiKlinik.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this Lokasi Klinik",
+    //   });
+    // }
 
     if (lokasiKlinik.image) tryDeleteUpload(lokasiKlinik.image);
     await lokasiKlinik.destroy();

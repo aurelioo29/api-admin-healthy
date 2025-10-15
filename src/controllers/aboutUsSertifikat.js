@@ -153,14 +153,14 @@ const updateAboutUsSertifikat = async (req, res, next) => {
       });
     }
 
-    if (aboutUsSertifikat.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message:
-          "Unauthorized: Not authorized to update this About Us Sertifikat",
-      });
-    }
+    // if (aboutUsSertifikat.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message:
+    //       "Unauthorized: Not authorized to update this About Us Sertifikat",
+    //   });
+    // }
 
     if (title) aboutUsSertifikat.title = title;
     if (date) aboutUsSertifikat.date = date;
@@ -213,14 +213,14 @@ const deleteAboutUsSertifikat = async (req, res, next) => {
       });
     }
 
-    if (aboutUsSertifikat.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message:
-          "Unauthorized: Not authorized to delete this About Us Sertifikat",
-      });
-    }
+    // if (aboutUsSertifikat.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message:
+    //       "Unauthorized: Not authorized to delete this About Us Sertifikat",
+    //   });
+    // }
 
     if (aboutUsSertifikat.image) tryDeleteUpload(aboutUsSertifikat.image);
     await aboutUsSertifikat.destroy();

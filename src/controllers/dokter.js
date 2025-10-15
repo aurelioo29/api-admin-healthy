@@ -146,13 +146,13 @@ const updateDokter = async (req, res, next) => {
       });
     }
 
-    if (dokter.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this dokter",
-      });
-    }
+    // if (dokter.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this dokter",
+    //   });
+    // }
 
     if (name) dokter.name = name;
     if (specialization) dokter.specialization = specialization;
@@ -202,13 +202,13 @@ const deleteDokter = async (req, res, next) => {
       });
     }
 
-    if (dokter.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this dokter",
-      });
-    }
+    // if (dokter.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this dokter",
+    //   });
+    // }
 
     if (dokter.image) tryDeleteUpload(dokter.image);
     await dokter.destroy();

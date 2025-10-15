@@ -226,13 +226,13 @@ const updateCatalog = async (req, res, next) => {
         .status(404)
         .json({ code: 404, success: false, message: "Catalog not found" });
     }
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not author",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not author",
+    //   });
+    // }
 
     // judul berubah -> slug & wa_text ikut
     if (title && title !== row.title) {
@@ -319,13 +319,13 @@ const deleteCatalog = async (req, res, next) => {
         .status(404)
         .json({ code: 404, success: false, message: "Catalog not found" });
     }
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not author",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not author",
+    //   });
+    // }
 
     if (row.image) tryDeleteUpload(row.image);
     await row.destroy();

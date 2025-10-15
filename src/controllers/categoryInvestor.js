@@ -158,14 +158,14 @@ const updateCategoryInvestor = async (req, res, next) => {
       });
     }
 
-    if (categoryPost.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message:
-          "Unauthorized: Not authorized to update this category investor",
-      });
-    }
+    // if (categoryPost.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message:
+    //       "Unauthorized: Not authorized to update this category investor",
+    //   });
+    // }
 
     if (name && name !== categoryPost.name) {
       categoryPost.slug = await generateUniqueSlug(CategoryInvestor, name);
@@ -211,14 +211,14 @@ const deleteCategoryInvestor = async (req, res, next) => {
       });
     }
 
-    if (categoryInvestor.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message:
-          "Unauthorized: Not authorized to delete this category investor",
-      });
-    }
+    // if (categoryInvestor.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message:
+    //       "Unauthorized: Not authorized to delete this category investor",
+    //   });
+    // }
 
     await categoryInvestor.destroy();
 

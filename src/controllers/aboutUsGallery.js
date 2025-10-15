@@ -153,13 +153,13 @@ const updateAboutUsGallery = async (req, res, next) => {
       });
     }
 
-    if (aboutUsGallery.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this About Us Gallery",
-      });
-    }
+    // if (aboutUsGallery.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this About Us Gallery",
+    //   });
+    // }
 
     if (title) aboutUsGallery.title = title;
     if (date) aboutUsGallery.date = date;
@@ -212,13 +212,13 @@ const deleteAboutUsGallery = async (req, res, next) => {
       });
     }
 
-    if (aboutUsGallery.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this About Us Gallery",
-      });
-    }
+    // if (aboutUsGallery.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this About Us Gallery",
+    //   });
+    // }
 
     if (aboutUsGallery.image) tryDeleteUpload(aboutUsGallery.image);
     await aboutUsGallery.destroy();

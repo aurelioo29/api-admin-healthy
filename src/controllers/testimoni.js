@@ -150,13 +150,13 @@ const updateTestimoni = async (req, res, next) => {
       });
     }
 
-    if (testimoni.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this testimoni",
-      });
-    }
+    // if (testimoni.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this testimoni",
+    //   });
+    // }
 
     if (name !== undefined) testimoni.name = name;
     if (age !== undefined) testimoni.age = age;
@@ -211,13 +211,13 @@ const deleteTestimoni = async (req, res, next) => {
       });
     }
 
-    if (testimoni.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this testimoni",
-      });
-    }
+    // if (testimoni.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this testimoni",
+    //   });
+    // }
 
     if (testimoni.image) tryDeleteUpload(testimoni.image);
     await testimoni.destroy();

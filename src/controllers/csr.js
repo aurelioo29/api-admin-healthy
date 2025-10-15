@@ -190,13 +190,13 @@ const updateCsrPost = async (req, res, next) => {
         .json({ code: 404, success: false, message: "CSR post not found" });
     }
 
-    if (csrPost.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this post",
-      });
-    }
+    // if (csrPost.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this post",
+    //   });
+    // }
 
     // update slug hanya kalau title berubah
     if (title && title !== csrPost.title) {
@@ -256,13 +256,13 @@ const deleteCsrPost = async (req, res, next) => {
       });
     }
 
-    if (csrPost.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this post",
-      });
-    }
+    // if (csrPost.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this post",
+    //   });
+    // }
 
     const oldImage = csrPost.image;
     await csrPost.destroy();

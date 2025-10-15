@@ -147,13 +147,13 @@ const updateLabTest = async (req, res, next) => {
         .json({ code: 404, success: false, message: "Lab test not found" });
     }
 
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this lab test",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this lab test",
+    //   });
+    // }
 
     if (title && title !== row.title) {
       row.slug = await generateUniqueSlug(LabTest, title);
@@ -198,13 +198,13 @@ const deleteLabTest = async (req, res, next) => {
         .json({ code: 404, success: false, message: "Lab test not found" });
     }
 
-    if (row.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this lab test",
-      });
-    }
+    // if (row.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this lab test",
+    //   });
+    // }
 
     await row.destroy();
 

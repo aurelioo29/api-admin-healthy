@@ -147,13 +147,13 @@ const updateCategoryArticle = async (req, res, next) => {
       });
     }
 
-    if (categoryArticle.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to update this category article",
-      });
-    }
+    // if (categoryArticle.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to update this category article",
+    //   });
+    // }
 
     categoryArticle.name = name;
     categoryArticle.slug = slug;
@@ -194,13 +194,13 @@ const deleteCategoryArticle = async (req, res, next) => {
       });
     }
 
-    if (categoryArticle.author_id !== req.user.id) {
-      return res.status(403).json({
-        code: 403,
-        success: false,
-        message: "Unauthorized: Not authorized to delete this category article",
-      });
-    }
+    // if (categoryArticle.author_id !== req.user.id) {
+    //   return res.status(403).json({
+    //     code: 403,
+    //     success: false,
+    //     message: "Unauthorized: Not authorized to delete this category article",
+    //   });
+    // }
 
     await categoryArticle.destroy();
 
